@@ -167,7 +167,12 @@ class HumanNames():
             return new_tokens
         #Last initials
         new_tokens = deque(tokens)
+        cycle_cnt = 0
         while new_tokens[-1].type == "INITIAL":
+            cycle_cnt += 1
+            if cycle_cnt > 50:
+                # prevent runaway loop for unsupported parse cases
+                break
             token = new_tokens.pop()
             new_tokens.appendleft(token)
         return new_tokens
